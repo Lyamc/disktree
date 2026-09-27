@@ -11,7 +11,6 @@
         "aarch64-linux"
       ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
-      modules = import ./nix/module.nix { inherit self; };
     in
     {
       packages = forAllSystems (system: {
@@ -40,10 +39,7 @@
         disktree = self.packages.${system}.default;
       });
 
-      nixosModules.default = modules.nixos;
-      homeModules.default = modules.homeManager;
-      # The name home-manager accepted before homeModules.
-      homeManagerModules.default = modules.homeManager;
+      nixosModules.default = ./nix/module.nix;
 
       overlays.default = final: _prev: {
         disktree = self.packages.${final.stdenv.hostPlatform.system}.default;

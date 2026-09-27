@@ -1,6 +1,6 @@
 # The installable disktree: the release binary, the launcher entry and the
 # icon. The same three files `make install` puts under a prefix, laid out
-# the way NixOS and home-manager expect.
+# the way NixOS expects under share/.
 #
 # GPUI loads the Vulkan loader, Wayland and fontconfig by name when the
 # window opens, so those libraries have to be on the binary's run path.
