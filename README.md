@@ -50,28 +50,27 @@ the release binary:
 yay -S disktree-bin
 ```
 
-On NixOS, install it from `configuration.nix`. Pin a revision and add the
-module:
+On NixOS, add it to `configuration.nix`. The package is fetched by
+`pkgs`, which is available for `environment.systemPackages` and is not
+available while the module system is still collecting `imports`:
 
 ```nix
 { pkgs, ... }:
-let
-  disktree = pkgs.fetchFromGitHub {
-    owner = "Lyamc";
-    repo = "disktree";
-    rev = "<commit>";
-    hash = "<sri-hash>";
-  };
-in
 {
-  imports = [ (disktree + "/nix/module.nix") ];
-  programs.disktree.enable = true;
+  environment.systemPackages = [
+    (pkgs.callPackage (pkgs.fetchFromGitHub {
+      owner = "Lyamc";
+      repo = "disktree";
+      rev = "<commit>";
+      hash = "<sri-hash>";
+    } + "/nix/package.nix") { })
+  ];
 }
 ```
 
-`nix-prefetch-url --unpack https://github.com/Lyamc/disktree/archive/<commit>.tar.gz`
-prints the hash. A flake-based NixOS configuration imports
-`inputs.disktree.nixosModules.default` instead of fetching the archive, with
+Leave the hash empty once and Nix prints the value it computed. A
+flake-based NixOS configuration can import `inputs.disktree.nixosModules.default`
+and set `programs.disktree.enable = true`, with
 `inputs.disktree.url = "github:Lyamc/disktree";`.
 
 `nix develop` in a checkout is a shell with the libraries GPUI links and Rust
