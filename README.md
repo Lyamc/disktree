@@ -50,6 +50,30 @@ the release binary:
 yay -S disktree-bin
 ```
 
+On NixOS, or anywhere else with Nix, the flake builds the same three files
+and puts them on your profile:
+
+```sh
+nix profile install github:Lyamc/disktree
+```
+
+A NixOS configuration that uses flakes can enable it instead:
+
+```nix
+{
+  inputs.disktree.url = "github:Lyamc/disktree";
+
+  # configuration.nix, or a module it imports
+  imports = [ inputs.disktree.nixosModules.default ];
+  programs.disktree.enable = true;
+}
+```
+
+home-manager takes `inputs.disktree.homeModules.default` and the same
+`programs.disktree.enable`. `nix develop` in a checkout is a shell with the
+libraries GPUI links and Rust from nixpkgs. The window needs a Wayland or
+X11 session; `disktree --help` does not.
+
 You need Rust 1.97 or newer and a Wayland or X11 session with a GPU that GPUI
 can drive (Vulkan). Distributions often package an older Rust;
 [rustup](https://rustup.rs) installs a current one. The repo pins 1.97 in
@@ -397,6 +421,7 @@ gone while their neighbours are not.
 | `crates/disktree-app/src/ui.rs` | the spacing, type and size scale, in `rem` |
 | `crates/disktree-app/src/tests.rs` | end-to-end tests through a real window |
 | `packaging/`, `assets/`, `Makefile` | the desktop entry, the icon, and install |
+| `flake.nix`, `nix/` | the Nix package and the NixOS and home-manager modules |
 
 The interface follows the
 [GPUI Kit design guides](https://gpui-kit.com/versions/main/docs/design-guides/):
