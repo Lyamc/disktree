@@ -11,6 +11,8 @@ let
   cfg = config.programs.disktree;
 in
 {
+  imports = [ ./web.nix ];
+
   options.programs.disktree = {
     enable = lib.mkEnableOption "disktree, a disk-usage treemap";
     package = lib.mkOption {

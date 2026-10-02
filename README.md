@@ -73,6 +73,18 @@ flake-based NixOS configuration can import `inputs.disktree.nixosModules.default
 and set `programs.disktree.enable = true`, with
 `inputs.disktree.url = "github:Lyamc/disktree";`.
 
+The same module serves a browser treemap, `services.disktree-web`.
+`paths` is which directories to measure and defaults to `[ "/" ]`.
+`exclude` is directories to skip. Neither list is built into the program.
+
+```nix
+{
+  services.disktree-web.enable = true;
+  services.disktree-web.paths = [ "/" "/srv/media" ];
+  services.disktree-web.exclude = [ "/nix/store" ];
+}
+```
+
 `nix develop` in a checkout is a shell with the libraries GPUI links and Rust
 from nixpkgs. The window needs a Wayland or X11 session; `disktree --help`
 does not.
